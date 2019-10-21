@@ -2,10 +2,17 @@ const { Tunnel, TunnelManager, TunnelAgent } = require('../apis');
 
 const manager = new TunnelManager();
 
-module.exports.hello = async (ctx) => {
-  const { subdomain = manager.create() } = ctx.request.body;
+module.exports.hello = async (req, res) => {
+  const { subdomain = manager.create() } = req.query;
 
-  ctx.assert(!manager.get(subdomain), 400, 'Tunnel is busy');
+  if (manager.get(subdomain)) {
+    res.end(JSON.stringify({
+      status: 400,
+      error: 'Tunnel is busy',
+    }));
+
+    return;
+  }
 
   const agent = new TunnelAgent();
   const tunnel = new Tunnel(subdomain, agent);
@@ -13,27 +20,25 @@ module.exports.hello = async (ctx) => {
 
   manager.add(tunnel.name, tunnel);
 
-  ctx.body = {
+  res.end(JSON.stringify({
     port,
-    url: `https://${subdomain}.localshare.me`,
-  };
+    subdomain,
+  }));
 };
 
-module.exports.tunnel = async (ctx) => {
-  const { host } = ctx.headers;
+module.exports.tunnel = (req, res) => {
+  const { host } = req.headers;
   const name = host && host.split('.')[0];
   const tunnel = manager.get(name);
 
-  ctx.assert(tunnel, 502, 'Tunnel is not found');
+  if (!tunnel) {
+    res.end(JSON.stringify({
+      status: 404,
+      error: 'Tunnel is not found',
+    }));
 
-  const response = await tunnel.send(ctx.req);
+    return;
+  }
 
-  Object.entries(response.headers).forEach(([key, value]) => {
-    ctx.set(key, value);
-  });
-
-  ctx.status = response.statusCode;
-  ctx.response = false;
-
-  response.pipe(ctx.res);
+  tunnel.request(req, res);
 };

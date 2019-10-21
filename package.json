@@ -24,9 +24,6 @@
   },
   "homepage": "https://github.com/localshare/server#readme",
   "dependencies": {
-    "koa": "^2.10.0",
-    "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
     "nanoid": "^2.1.4",
     "redis": "^2.8.0"
   }
