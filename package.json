@@ -1,0 +1,32 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "description": "🌐 server for localshare.me",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/localshare/server.git"
+  },
+  "keywords": [
+    "localshare",
+    "ngrok",
+    "local",
+    "tunnel",
+    "localtunnel"
+  ],
+  "author": "Mikhail Semin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/localshare/server/issues"
+  },
+  "homepage": "https://github.com/localshare/server#readme",
+  "dependencies": {
+    "koa": "^2.10.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "nanoid": "^2.1.4"
+  }
+}
