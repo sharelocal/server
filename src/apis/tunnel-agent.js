@@ -2,15 +2,16 @@ const net = require('net');
 const http = require('http');
 
 class TunnelAgent extends http.Agent {
-  constructor() {
+  constructor(port) {
     super();
 
     this.sockets = [];
     this.queue = [];
+    this.port = port;
   }
 
-  start() {
-    return new Promise((resolve) => {
+  async start() {
+    this.port = await new Promise((resolve) => {
       const server = net.createServer((socket) => {
         const callback = this.queue.shift();
 
@@ -23,10 +24,12 @@ class TunnelAgent extends http.Agent {
         } else {
           this.sockets.push(socket);
         }
-      }).listen(() => {
+      }).listen(this.port, () => {
         resolve(server.address().port);
       });
     });
+
+    return this.port;
   }
 
   createConnection(options, callback) {

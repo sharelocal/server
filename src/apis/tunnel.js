@@ -15,10 +15,6 @@ class Tunnel {
         agent: this.agent,
       }, resolve);
 
-      request.on('error', (e) => {
-        console.error(`problem with request: ${e.message}`);
-      });
-
       req.pipe(request);
     });
   }
