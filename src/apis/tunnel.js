@@ -17,6 +17,13 @@ class Tunnel {
       response.pipe(res);
     });
 
+    request.on('error', () => {
+      res.end(JSON.stringify({
+        status: 500,
+        error: 'Tunnel error',
+      }));
+    });
+
     req.pipe(request);
   }
 }

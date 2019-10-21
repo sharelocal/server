@@ -35,10 +35,10 @@ class TunnelAgent extends http.Agent {
   createConnection(options, callback) {
     const socket = this.sockets.shift();
 
-    if (!socket) {
-      this.queue.push(callback);
-    } else {
+    if (socket) {
       callback(null, socket);
+    } else {
+      this.queue.push(callback);
     }
   }
 }
