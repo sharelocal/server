@@ -6,15 +6,15 @@ class Tunnel {
     this.agent = agent;
   }
 
-  request(req, res) {
+  request(ctx) {
     const request = http.request({
-      path: req.url,
-      method: req.method,
-      headers: req.headers,
+      path: ctx.path,
+      method: ctx.method,
+      headers: ctx.headers,
       agent: this.agent,
     }, (response) => {
-      res.writeHead(response.statusCode, response.headers);
-      response.pipe(res);
+      ctx.res.writeHead(response.statusCode, response.headers);
+      response.pipe(ctx.res);
     });
 
     request.on('error', () => {
@@ -24,7 +24,7 @@ class Tunnel {
       }));
     });
 
-    req.pipe(request);
+    ctx.req.pipe(request);
   }
 }
 

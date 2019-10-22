@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/localshare/server#readme",
   "dependencies": {
+    "mongoose": "^5.7.6",
     "nanoid": "^2.1.4",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "sha256": "^0.2.0"
   }
 }

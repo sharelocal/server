@@ -1,7 +1,7 @@
 const safeParse = require('./safeParse');
-const parseQuery = require('./parseQuery');
+const encryptPassword = require('./encryptPassword');
 
 module.exports = {
   safeParse,
-  parseQuery,
+  encryptPassword
 };
