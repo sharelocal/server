@@ -8,6 +8,11 @@ class TunnelAgent extends http.Agent {
     this.sockets = [];
     this.queue = [];
     this.port = port;
+
+    this.timeout = setTimeout(() => {
+      console.log(this.port, 'dead');
+      this.emit('dead');
+    }, 1000);
   }
 
   async start() {
@@ -15,8 +20,18 @@ class TunnelAgent extends http.Agent {
       const server = net.createServer((socket) => {
         const callback = this.queue.shift();
 
+        if (!this.sockets.length) {
+          clearTimeout(this.timeout);
+        }
+
         socket.on('close', () => {
           this.sockets.splice(this.sockets.indexOf(socket), 1);
+
+          if (!this.sockets.length) {
+            this.timeout = setTimeout(() => {
+              this.emit('dead');
+            }, 1000);
+          }
         });
 
         if (callback) {

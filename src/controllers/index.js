@@ -3,7 +3,7 @@ const { Tunnel, TunnelManager, TunnelAgent } = require('../apis');
 const manager = new TunnelManager();
 
 module.exports.hello = async (req, res) => {
-  const { subdomain = manager.create() } = req.query;
+  const { subdomain = manager.getAvailableName() } = req.query;
 
   if (manager.get(subdomain)) {
     res.end(JSON.stringify({
@@ -19,6 +19,10 @@ module.exports.hello = async (req, res) => {
   const port = await agent.start();
 
   manager.add(tunnel.name, tunnel);
+
+  agent.on('dead', () => {
+    manager.remove(tunnel.name);
+  });
 
   res.end(JSON.stringify({
     port,

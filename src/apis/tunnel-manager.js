@@ -32,6 +32,10 @@ class TunnelManager {
         const agent = new TunnelAgent(port);
         const tunnel = new Tunnel(name, agent);
 
+        agent.on('dead', () => {
+          this.remove(name);
+        });
+
         await agent.start();
 
         this.tunnels[name] = tunnel;
@@ -39,23 +43,39 @@ class TunnelManager {
     );
   }
 
-  create() {
+  getAvailableName() {
     const name = generate('1234567890abcdefghijklmnopqrstuvwxyz', 4);
 
     return this.tunnels[name]
-      ? this.create()
+      ? this.getAvailableName()
       : name;
   }
 
   add(name, tunnel) {
     setImmediate(async () => {
-      await redis.hset('tunnels', name, JSON.stringify({
-        name,
-        port: tunnel.agent.port,
-      }));
+      try {
+        await redis.hset('tunnels', name, JSON.stringify({
+          name,
+          port: tunnel.agent.port,
+        }));
+      } catch (err) {
+        console.error('Cannot save tunnel settings into redis', err);
+      }
     });
 
     this.tunnels[name] = tunnel;
+  }
+
+  remove(name) {
+    setImmediate(async () => {
+      try {
+        await redis.hdel('tunnels', name);
+      } catch (err) {
+        console.error('Cannot delete tunnel settings from redis', err);
+      }
+    });
+
+    delete this.tunnels[name];
   }
 
   get(name) {
