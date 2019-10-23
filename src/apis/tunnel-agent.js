@@ -28,6 +28,8 @@ class TunnelAgent extends http.Agent {
           this.sockets.splice(this.sockets.indexOf(socket), 1);
 
           if (!this.sockets.length) {
+            clearTimeout(this.timeout);
+
             this.timeout = setTimeout(() => {
               this.emit('dead');
             }, 1000);
