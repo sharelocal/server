@@ -10,4 +10,4 @@ http.createServer((req, res) => {
   } else {
     controllers.tunnel(req, res);
   }
-}).listen(process.env.APP_PORT);
+}).listen(process.env.APP_PORT || 3000);
