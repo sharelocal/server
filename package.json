@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/localshare/server#readme",
   "dependencies": {
-    "nanoid": "^2.1.4",
-    "redis": "^2.8.0"
+    "nanoid": "^2.1.4"
   }
 }
