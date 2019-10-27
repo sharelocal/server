@@ -10,7 +10,6 @@ class TunnelAgent extends http.Agent {
     this.port = port;
 
     this.timeout = setTimeout(() => {
-      console.log(this.port, 'dead');
       this.emit('dead');
     }, 1000);
   }
