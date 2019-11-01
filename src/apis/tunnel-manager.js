@@ -5,16 +5,20 @@ class TunnelManager {
     this.tunnels = {};
   }
 
-  create() {
+  getAvailableName() {
     const name = generate('1234567890abcdefghijklmnopqrstuvwxyz', 4);
 
     return this.tunnels[name]
-      ? this.create()
+      ? this.getAvailableName()
       : name;
   }
 
   add(name, tunnel) {
     this.tunnels[name] = tunnel;
+  }
+
+  remove(name) {
+    delete this.tunnels[name];
   }
 
   get(name) {
