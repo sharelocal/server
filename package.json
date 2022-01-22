@@ -27,6 +27,6 @@
     "koa": "^2.10.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "nanoid": "^2.1.4"
+    "nanoid": "^3.1.31"
   }
 }
